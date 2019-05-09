@@ -1,0 +1,109 @@
+#include<iostream>
+using namespace std;
+
+
+class IntLinkListNode
+{
+public:
+	int data;
+	IntLinkListNode *next;
+	IntLinkListNode(int d)
+	{
+		data = d;
+		next = NULL;
+	}
+
+};
+
+class IntLinkList
+{
+public:
+	IntLinkListNode *head;
+	IntLinkListNode *tail;
+	int size;
+	IntLinkList()
+	{
+		size = 0;
+		head = NULL;
+		tail = NULL;
+	}
+	~IntLinkList()
+	{
+		FreeSpace();
+	}
+	void PushBack(int data) // 
+	{
+		size++;
+		IntLinkListNode *newNode = new IntLinkListNode(data);
+		if (this->head == NULL)
+		{
+			this->head = newNode;
+		}
+		else if (tail == NULL)
+		{
+			this->tail = newNode;
+			this->head->next = tail;
+		}
+		else {
+			this->tail->next = newNode;
+			tail = newNode;
+		}
+	}
+	void InsertAt(int data, int n)
+	{
+		if (n >= size)
+		{
+			return;
+		}
+		int i = 0;
+		IntLinkListNode *newNode = new IntLinkListNode(data);
+		IntLinkListNode *current = head;
+		while (i < n-1)
+		{
+			i++;
+			current = current->next;
+		}
+		newNode->next = current->next;
+		current->next = newNode;
+		size++;
+	}
+	void PintList()
+	{
+		IntLinkListNode *current = head;
+		while (current != NULL)
+		{
+			cout << current->data;
+			current = current->next;
+		}
+	}
+	void FreeSpace()
+	{
+		cout << "DESTROY" << endl;
+		IntLinkListNode *current = head;
+		IntLinkListNode *nextOne = head->next;
+		for (int i = 0; i < size; i++)
+		{
+			delete current;
+			current = nextOne;
+			if (nextOne != NULL) nextOne = nextOne->next;
+		}
+		cout << head<<endl;
+	}
+};
+
+
+
+int main()
+{
+	IntLinkList newList;
+	for (int i = 0; i < 20; i++)
+	{
+		newList.PushBack(i);
+	}
+	cout << newList.size << endl;
+	newList.PintList();
+	newList.FreeSpace();
+	//newList.PintList();
+	system("pause");
+	return 0;
+}
