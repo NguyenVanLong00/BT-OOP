@@ -1,0 +1,135 @@
+#pragma once
+
+template<typename E> class linhkedlist;
+template<typename E>
+class node
+{
+private:
+	E data;
+	node<E> *next;
+	friend class linhkedlist<E>;
+};
+-----------------------------------
+#pragma once
+#include"node.h"
+#include<iostream>
+#include<string>
+using namespace std;
+
+template<typename E>
+class linhkedlist
+{
+public:
+	linhkedlist();
+	~linhkedlist();
+	bool empty() const;
+	const E& front() const;
+	void addFront(const E& e);
+	void removeFront();
+	int size();
+	const node<E>& bfTaill();
+	void printAll();
+private:
+	node<E> * head;
+	int sz;
+};
+template<typename E>
+linhkedlist<E>::linhkedlist()
+{
+	head = nullptr;
+	sz = 0;
+}
+template<typename E>
+linhkedlist<E>::~linhkedlist()
+{
+	while (head != nullptr)
+	{
+		removeFront();
+	}
+}
+
+template<typename E>
+inline bool linhkedlist<E>::empty() const
+{
+	return head == nullptr;
+}
+
+template<typename E>
+inline const E & linhkedlist<E>::front() const
+{
+	return head->data;
+}
+
+template<typename E>
+inline void linhkedlist<E>::addFront(const E & e)
+{
+	node<E> *nnode = new node<E>;
+	nnode->data = e;
+	nnode->next = head;
+	head = nnode;
+	sz++;
+}
+
+template<typename E>
+inline void linhkedlist<E>::removeFront()
+{
+	node<E> *del = head;
+	head = head->next;
+	delete del;
+	sz--;
+}
+
+template<typename E>
+inline int linhkedlist<E>::size()
+{
+	return sz;
+}
+
+template<typename E>
+inline const node<E>& linhkedlist<E>::bfTaill()
+{
+	node<E> *current = head;
+	while (current->next->next != nullptr)
+	{
+		current = current->next;
+	}
+	return *current;
+}
+
+template<typename E>
+inline void linhkedlist<E>::printAll()
+{
+	node<E>* current = head;
+	while (current->next != nullptr && current != NULL)
+	{
+		std::cout << current->data << " ";
+		current = current->next;
+	}
+}
+
+template<typename E>
+linhkedlist<E>& add(const linhkedlist<E>& vt1, const linhkedlist<E>& vt2)
+{
+	linhkedlist<E>* vector = new linhkedlist;
+	node<E>		* current=vector->head;
+	node<E> *current1 = vt1.head;
+	node<E> *current2 = vt2.head;
+
+	vector->head = new node<E>;
+	current = vector->head;
+	current->data = current1->data;
+	while (current1 != NULL)
+	{
+		current1 = current1->next;
+		current->next=new node<E>;
+		current->next->data = current1->data;
+		current = current->next;
+	}
+	while (current2 != NULL)
+	{
+		current->next = new node<E>;
+		current->next->data = current->data;
+		current2 = current2->next;
+		current = current->next;
+	}
+}
