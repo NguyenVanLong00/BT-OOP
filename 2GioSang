@@ -1,0 +1,128 @@
+#pragma once
+#include<iostream>
+#define max 5
+
+template<typename E> class vector;
+template<typename E>
+class node
+{
+private:
+	E data[100];
+	node<E> *next;
+	int size;
+	friend class vector<E>;
+public:
+	node()
+	{
+		next = NULL;
+		size = 0;
+	}
+	void add(const E& e)
+	{
+		data[size] = e;
+		size++;
+	}
+	bool isFull()
+	{
+		return !(size < max);
+	}
+
+};
+
+template<typename E>
+class vector
+{
+private:
+	node<E> *head;
+	int size;
+public:
+	vector()
+	{
+		head = new node<E>;
+		size = 0;
+	}
+	~vector()
+	{
+		node<E> * del;
+		while (head != NULL)
+		{
+			del = head;
+			head = head->next;
+			delete del;
+		}
+	}
+
+	void push_back(const E& e)
+	{
+		node<E> *current = head;
+		while (current->next != NULL)
+		{
+			current = current->next;
+		}
+		if (!current->isFull())
+		{
+			current->add(e);
+			return;
+		}
+		current->next = new node<E>;
+		current->next->add(e);
+		size++;
+	}
+
+	E& operator[](const int &i)
+	{
+		int VtNode = i / max;
+		int index = i % max;
+		int t = 0;
+		node<E> *current = head;
+		while (t < VtNode)
+		{
+			current = current->next;
+			t++;
+		}
+		return current->data[index];
+	}
+
+	void reSize(int s)
+	{
+		int realSize = size * max;
+		if (!s < realSize)
+		{
+			int t = (realSize - s) / max + 1;
+			node<E> *current = head;
+			while (current->next != NULL)
+			{
+				current = current->next;
+			}
+			while (t > 0)
+			{
+				current->next = new node<E>;
+				current = current->next;
+				t--;
+			}
+			size = s;
+		}
+		else
+		{
+			int vtNode = s / max + 1;
+			if (vtNode == size)
+				return;
+			int i = 0;
+			node<E> *current = head;
+			node<E> *del;
+			while (i < vtNode + 1)
+			{
+				current = current->next;
+				i++;
+			}
+			while (current != NULL)
+			{
+				current = current->next;
+				del = current;
+				delete del;
+			}
+
+		}
+	}
+
+};
