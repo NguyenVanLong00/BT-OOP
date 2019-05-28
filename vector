@@ -1,0 +1,118 @@
+#include <iostream>
+#define max 10
+using namespace std;
+template<typename E> class myvector;
+template<typename E>
+class node
+{
+    private:
+        E data[max];
+        node<E> *next;
+        int size;
+        friend class myvector<E>;
+    public:
+        node()
+        {
+            size=0;
+            next=NULL;
+        }
+};
+template<typename E>
+class myvector
+{
+    private:
+        node<E> *head;
+        int size;
+    public:
+        myvector()
+        {
+            head=NULL;
+            size=0;
+        }
+        bool isEmpty()
+        {
+            return size==0;
+        }
+        E& front()
+        {
+            //if(isEmpty())
+            //   return NULL;
+            return head->data[0];
+        }
+        E& operator[](int i)
+        {
+            //if(isEmpty())
+            //    return NULL;
+            int index=i%max;
+            int vt=i/max;
+            node<E> *current=head;
+            while(vt>0)
+            {
+                current=current->next;
+                vt--;
+            }
+            if(index<current->size)
+            {
+                current->data[index];
+                current->size++;
+            }
+            //else
+            //   return NULL;
+        }
+        
+        void push_back(const E& value)
+        {
+            if(isEmpty())
+            {
+                node<E> * nnode =new node<E>;
+                nnode->data[0]=value;
+                nnode->size++;
+            }
+            else
+            {
+                node<E> *current=head;
+                while(current->next!=NULL)
+                {
+                    current=current->next;
+                }
+                if(current->size<max)
+                {
+                    current->data[size]=value;
+                    current->size++;
+                }
+                else
+                {
+                    node<E> * nnode =new node<E>;
+                    nnode->data[0]=value;
+                    nnode->size++;
+                }
+            }
+        }
+        ~myvector()
+        {
+            node<E> *current;
+            while(head!=NULL)
+            {
+                current=head;
+                head=head->next;
+                delete current;
+            }
+        }
+};
+
+
+
+int main()
+{
+    myvector<int> x;
+    for(int i=0;i<10;i++)
+    {
+        x.push_back(i);
+    }
+    for(int i=0;i<10;i++)
+    {
+        cout<<x[i]<<" ";
+    }
+    
+    return 0;
+}
